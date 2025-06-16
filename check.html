@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin Code Checker</title>
+  <style>
+    body {
+      background-color: #1e1e1e;
+      color: #00ff00;
+      font-family: 'Courier New', monospace;
+      padding: 20px;
+    }
+    input, button {
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 5px;
+      border: none;
+      margin-top: 10px;
+    }
+    button {
+      background-color: #4CAF50;
+      color: white;
+      cursor: pointer;
+    }
+    #result {
+      margin-top: 15px;
+      font-size: 18px;
+    }
+  </style>
+</head>
+<body>
+  <h2>Admin Code Checker</h2>
+  <div id="adminArea" style="display:none;">
+    <input type="text" id="codeInput" placeholder="Enter code"><br>
+    <button onclick="checkCode()">Check</button>
+    <p id="result"></p>
+  </div>
+
+  <script>
+    const adminPassword = "admin123";
+    const userPass = prompt("Enter Admin Password:");
+    if (userPass === adminPassword) {
+      document.getElementById("adminArea").style.display = "block";
+    } else {
+      alert("Access Denied.");
+      window.location.href = "generate.html";
+    }
+
+    function checkCode() {
+      const input = document.getElementById("codeInput").value.trim();
+      let codes = JSON.parse(localStorage.getItem("codes") || "[]");
+      const found = codes.find(c => c.value === input);
+      const result = document.getElementById("result");
+
+      if (!found) {
+        result.textContent = "❌ Invalid Code";
+        result.style.color = "red";
+      } else if (found.used) {
+        result.textContent = "⚠️ Code Already Used";
+        result.style.color = "orange";
+      } else {
+        result.textContent = "✅ Valid Code!";
+        result.style.color = "lightgreen";
+        found.used = true;
+        localStorage.setItem("codes", JSON.stringify(codes));
+      }
+    }
+  </script>
+</body>
+</html>

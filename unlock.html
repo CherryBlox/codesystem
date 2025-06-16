@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Unlock Code</title>
+  <style>
+    body {
+      background-color: #1e1e1e;
+      color: #00ff00;
+      font-family: 'Courier New', monospace;
+      padding: 20px;
+    }
+    #codeDisplay {
+      margin-top: 20px;
+      font-size: 18px;
+    }
+  </style>
+</head>
+<body>
+  <h2>Unlock Code</h2>
+  <div id="codeDisplay"></div>
+
+  <script>
+    const urlToken = new URLSearchParams(location.search).get("token");
+    const sessionToken = sessionStorage.getItem("link_token");
+
+    if (!urlToken || urlToken !== sessionToken) {
+      alert("Access Denied. Please use Linkvertise.");
+      location.href = "generate.html";
+    } else {
+      const code = Math.floor(10000 + Math.random() * 90000).toString();
+      let codes = JSON.parse(localStorage.getItem("codes") || "[]");
+      codes.push({ value: code, used: false });
+      localStorage.setItem("codes", JSON.stringify(codes));
+
+      document.getElementById("codeDisplay").innerHTML = `
+        ✅ Your code: <b>${code}</b>
+      `;
+    }
+  </script>
+</body>
+</html>
